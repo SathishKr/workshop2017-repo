@@ -1,0 +1,27 @@
+version: 0.0
+os: linux
+files:
+  - source: target/devops-workshop-0.0.1-SNAPSHOT.jar
+    destination: /home/ec2-user/javaapp
+  - source: scripts/start.sh
+    destination: /home/ec2-user/javaapp
+  - source: scripts/stop.sh
+    destination: /home/ec2-user/javaapp
+permissions:
+  - object: /home/ec2-user
+    owner: ec2-user
+    group: ec2-user
+    mode: 755
+hooks:
+  BeforeInstall:
+    - location: scripts/backup.sh
+      timeout: 300
+      runas: ec2-user
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 300
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/install.sh
+      timeout: 300
+      runas: ec2-user

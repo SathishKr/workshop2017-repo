@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta ="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/ico" href="https://a0.awsstatic.com/main/images/site/fav/favicon.ico" />
+<title>AWS DevOps Workshop Feedback</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+        crossorigin="anonymous">
+<link rel="stylesheet" href="./css/main.css" />
+</head>
+
+<body>
+<div id="wrap">
+  <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar aws-nav-header">
+            <a class="navbar-brand mr-0 mr-md-2" href="https://reinvent.awsevents.com/">
+                <img src="/img/aws-reinvent-logo.png" alt="AWS re:Invent 2017 logo">
+            </a>
+            <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                <p class="workshop">Demo Project | Workshop: Advanced DevOps Practices for</p>
+                <a class="navbar-brand mr-0 mr-md-2" href="https://aws.amazon.com/">
+                    <img class="aws-amazon_web_services_smile-header-desktop-en" 
+                        src="./img/aws_smile-header-desktop-en-white_59x35@2x.png" alt="AWS logo">
+                </a>
+            </div>
+
+  </header>
+  <div class="container-fluid">
+    <div style="text-align: center;">
+        <h2>Hope you have a great re:Invent! Please share your feedback or any random thoughts.</h2>
+    </div>
+
+    <form action="/feedback" method="post" id="feedbackForm">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input class="form-control" id="name">
+      </div>
+      <!--////
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input class="form-control" id="title">
+      </div>
+      ////-->
+      <div class="form-group">
+        <label for="feedback">Your feedback or any random thoughts here:</label>
+        <textarea class="form-control" id="feedback" rows="5"></textarea>
+      </div>
+      <div class="alert alert-success" id="success-alert">
+        <strong>Success!</strong> Thank you!
+      </div>
+      <button type="submit" class="btn btn-outline-primary btn-lg">Submit</button>
+    </form>
+    <p></p>
+    <div class="list-group" id="lists"></div>
+  </div>
+</div> 
+ <footer id="aws-page-footer" class="aws-page-footer">
+        <div class="lb-small-24 lb-mid-16 lb-col aws-copyright">
+            <div>
+                Copyright &copy; Amazon Web Services 2017
+            </div>
+        </div>
+</footer>
+    
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
+</script>
+<script
+  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+  integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+  crossorigin="anonymous">
+</script>
+
+<script>
+    $(document).ready(function() {
+      $("#success-alert").hide();
+      getAllItems();
+
+      $("#feedbackForm").submit(function(e){
+        e.preventDefault();
+        var fdata = {}
+        fdata["name"] = $("#name").val();
+        fdata["comment"] = $("#feedback").val();
+        if ($("#title").val()) {
+        	fdata["title"] = $("#title").val();
+        }
+        $.ajax({
+            cache: false,
+            url : "/feedback",
+            type: "POST",
+            dataType : "json",
+            contentType: "application/json; charset=utf-8",
+            data : JSON.stringify(fdata),
+            success : function(callback){
+            	$("#lists").empty();
+            	getAllItems();
+            	$("#success-alert").alert();
+                $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+                  $("#success-alert").slideUp(500);
+                });
+            },
+            error : function(){
+                alert("Error to save data");
+            }
+        });
+      });
+    });
+    
+    function getAllItems() {
+      $.ajax({
+        url: "/feedback"
+      })
+      .done(function(json) {
+    	  $.each(json, function(i) {
+    		  insertListItem(json[i]);
+    	  });
+        });
+    }
+    function insertListItem(i) {
+      var newItem = '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">' +
+    	  '<div class="row">' +
+          '<div class="col-3"><strong>Name: </strong>' + i.name + '</div>';
+      if (i.title) {
+    	  newItem += '<div class="col-3"><strong>Title: </strong>' + i.title + '</div>'
+      }    
+      newItem +=
+          '<div class="col-3 small">' + i.tsdiff + '</div>' +
+          '</div>' +
+          '<div class="row"><p class="comment">' + i.comment + '</p></div></a>';
+      $("#lists").prepend(newItem);
+    }
+    
+</script>
+</body>
+</html>
