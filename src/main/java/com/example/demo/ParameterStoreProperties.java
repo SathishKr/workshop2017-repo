@@ -29,7 +29,6 @@ public class ParameterStoreProperties implements ApplicationListener<Application
             region = Regions.getCurrentRegion().getName();
         }
         String parameterKey = "/demo/db-password";
-/*
         AWSCredentialsProvider credentials = InstanceProfileCredentialsProvider.getInstance();
         try {
             AWSSimpleSystemsManagement simpleSystemsManagementClient = (AWSSimpleSystemsManagement) ((AWSSimpleSystemsManagementClientBuilder) ((AWSSimpleSystemsManagementClientBuilder) AWSSimpleSystemsManagementClientBuilder
@@ -47,6 +46,5 @@ public class ParameterStoreProperties implements ApplicationListener<Application
         } catch (SdkClientException ex) {
             System.out.println("Error:" + ex.getMessage());
         }
-*/
     }
 }
