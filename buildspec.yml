@@ -19,7 +19,7 @@ phases:
     commands:
       - echo Entering post_build phase...
       - echo Build completed on `date`
-#      - scripts/db-migrate.sh
+      - scripts/db-migrate.sh
 artifacts:
   type: zip
   files:

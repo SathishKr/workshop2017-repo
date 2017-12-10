@@ -5,6 +5,6 @@ password=$(aws ssm get-parameters --region us-west-2 --names /demo/db-password \
     --with-decryption --query Parameters[0].Value|sed 's/^"\(.*\)"$/\1/')
 
 # you need to get DB instance IP from the EC2 console
-mvn compile flyway:migrate -Dflyway.user=root -Dflyway.url=jdbc:mysql://<DB Instance IP>/commentdb \
+mvn compile flyway:migrate -Dflyway.user=root -Dflyway.url=jdbc:mysql://34.211.12.228/commentdb \
     -Dflyway.password=$password -Dflyway.baselineOnMigrate=true
 
