@@ -30,8 +30,8 @@ public class Comment {
     @Column(name = "timeStamp")
     private long ts;
     
-////    @Column(name = "title")
-////    private String title;
+    @Column(name = "title")
+    private String title;
     
     @Transient
     private String tsdiff;
@@ -53,13 +53,13 @@ public class Comment {
                 id, name, comment);
     }
 
-////    public String getTitle() {
-////        return title;
-////    }
-////
-////    public void setTitle(String title) {
-////        this.title = title;
-////    }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
